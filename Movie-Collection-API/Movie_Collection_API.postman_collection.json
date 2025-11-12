@@ -1,0 +1,324 @@
+{
+  "info": {
+    "name": "Movie Collection API",
+    "description": "Collection of API requests for Movie Collection API testing",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8000",
+      "type": "string"
+    },
+    {
+      "key": "movie_id",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Health & Root",
+      "item": [
+        {
+          "name": "Root Endpoint",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/",
+              "host": ["{{base_url}}"],
+              "path": [""]
+            }
+          }
+        },
+        {
+          "name": "Health Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/health",
+              "host": ["{{base_url}}"],
+              "path": ["health"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Movies",
+      "item": [
+        {
+          "name": "Create Movie",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.environment.set('movie_id', jsonData._id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"The Shawshank Redemption\",\n  \"director\": \"Frank Darabont\",\n  \"genre\": \"Drama\",\n  \"release_year\": 1994,\n  \"rating\": 9.3,\n  \"is_favorite\": true\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/movies/",
+              "host": ["{{base_url}}"],
+              "path": ["movies", ""]
+            }
+          }
+        },
+        {
+          "name": "Get All Movies",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/movies/?page=1&page_size=10",
+              "host": ["{{base_url}}"],
+              "path": ["movies", ""],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "page_size",
+                  "value": "10"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get All Movies (Sorted)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/movies/?page=1&page_size=10&sort_by=rating&order=desc",
+              "host": ["{{base_url}}"],
+              "path": ["movies", ""],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "page_size",
+                  "value": "10"
+                },
+                {
+                  "key": "sort_by",
+                  "value": "rating"
+                },
+                {
+                  "key": "order",
+                  "value": "desc"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Search Movies by Title",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/movies/search?title=shawshank",
+              "host": ["{{base_url}}"],
+              "path": ["movies", "search"],
+              "query": [
+                {
+                  "key": "title",
+                  "value": "shawshank"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Search Movies by Director",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/movies/search?director=nolan",
+              "host": ["{{base_url}}"],
+              "path": ["movies", "search"],
+              "query": [
+                {
+                  "key": "director",
+                  "value": "nolan"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Search Movies by Year Range",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/movies/search?min_year=1990&max_year=2000",
+              "host": ["{{base_url}}"],
+              "path": ["movies", "search"],
+              "query": [
+                {
+                  "key": "min_year",
+                  "value": "1990"
+                },
+                {
+                  "key": "max_year",
+                  "value": "2000"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Movie by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/movies/{{movie_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["movies", "{{movie_id}}"]
+            }
+          }
+        },
+        {
+          "name": "Update Movie",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"rating\": 9.5,\n  \"is_favorite\": false\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/movies/{{movie_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["movies", "{{movie_id}}"]
+            }
+          }
+        },
+        {
+          "name": "Delete Movie",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/movies/{{movie_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["movies", "{{movie_id}}"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Error Handling Tests",
+      "item": [
+        {
+          "name": "Invalid Movie ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/movies/invalid_id",
+              "host": ["{{base_url}}"],
+              "path": ["movies", "invalid_id"]
+            }
+          }
+        },
+        {
+          "name": "Create Movie - Invalid Rating",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Invalid Movie\",\n  \"director\": \"Test Director\",\n  \"genre\": \"Drama\",\n  \"release_year\": 2020,\n  \"rating\": 15.0,\n  \"is_favorite\": false\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/movies/",
+              "host": ["{{base_url}}"],
+              "path": ["movies", ""]
+            }
+          }
+        },
+        {
+          "name": "Create Movie - Future Year",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Future Movie\",\n  \"director\": \"Test Director\",\n  \"genre\": \"Drama\",\n  \"release_year\": 2030,\n  \"rating\": 8.0,\n  \"is_favorite\": false\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/movies/",
+              "host": ["{{base_url}}"],
+              "path": ["movies", ""]
+            }
+          }
+        },
+        {
+          "name": "Create Movie - Empty Title",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"\",\n  \"director\": \"Test Director\",\n  \"genre\": \"Drama\",\n  \"release_year\": 2020,\n  \"rating\": 8.0,\n  \"is_favorite\": false\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/movies/",
+              "host": ["{{base_url}}"],
+              "path": ["movies", ""]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
