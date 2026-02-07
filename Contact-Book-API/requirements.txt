@@ -1,0 +1,7 @@
+fastapi
+uvicorn
+pydantic
+pydantic-settings
+
+#requests - lib for making requests (sync)
+#httpx - newer way (supports async) lib for making http requests to API (internal/external ex. google)

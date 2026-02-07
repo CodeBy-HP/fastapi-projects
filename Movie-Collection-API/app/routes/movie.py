@@ -1,15 +1,9 @@
 from typing import Literal, Optional
 from beanie import PydanticObjectId
-from fastapi import APIRouter, HTTPException, status, Query
+from fastapi import APIRouter, HTTPException, status, Query, Path
 import math
 from app.models.movie import Movie
-from app.schemas.movie import (
-    MovieCreate,
-    MovieUpdate,
-    MovieResponse,
-    MovieListResponse,
-    MessageResponse,
-)
+from app.schemas import *
 from beanie.operators import RegEx, And
 
 router = APIRouter(prefix="/movies", tags=["Movies"])
@@ -179,7 +173,9 @@ async def search_movies(
     summary="Get a Movie by ID",
     description="Retrieve detailed information about specific movie",
 )
-async def get_movie_by_id(movie_id: str) -> MovieResponse:
+async def get_movie_by_id(
+    movie_id: str = Path(...,description="Id of the movie"),
+) -> MovieResponse:
     try:
         # Validate and convert to ObjectId
         try:
@@ -244,7 +240,7 @@ async def update_movie(movie_id: str, movie_data: MovieUpdate) -> MovieResponse:
         # Update book
         await movie.set(update_data)
 
-        await movie.sync()
+        await movie.fetch()
 
         return MovieResponse(_id=str(movie.id), **movie.model_dump(exclude={"id"}))
 

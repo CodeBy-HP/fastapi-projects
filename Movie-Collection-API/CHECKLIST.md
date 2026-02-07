@@ -26,6 +26,8 @@ pip install fastapi uvicorn motor beanie pydantic python-dotenv httpx requests
 
 - **Set config file at app/core/config.py**
 
+- set logger for each File
+
 - **Make Beanie Models**
 Fields:
     title: str
@@ -35,6 +37,8 @@ Fields:
     rating: float (0–10)
     is_favorite: bool (default=False)
 
+    - do LOCAL TESTING Of the Beanie document by converting it to pydantic basemodel
+
 - **Setup database connection**
 
 - **Initialze the Fastapi App lifespan with db methods**
@@ -42,6 +46,7 @@ Fields:
 - ***Setup CRUD Schemas***
 
 - **Setup CRUD routes**
+- include routers in main.py
 
 - set /health endpoint in main.py
 
